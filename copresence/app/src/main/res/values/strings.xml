@@ -23,5 +23,6 @@
     <string name="prompt_device_name_message">Please name your device</string>
     <string name="prompt_device_name_hint">e.g. My Device</string>
     <string name="prompt_device_name_error">Must provide a name</string>
+    <string name="what_are_you_here_for">What Are You Here For?</string>
 
 </resources>

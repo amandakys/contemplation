@@ -14,49 +14,17 @@
 
 package com.digitalwellbeingexperiments.toolkit.copresence
 
+import android.content.Intent
+import android.content.IntentFilter
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.widget.TextView
-import androidx.recyclerview.widget.DividerItemDecoration
-import androidx.recyclerview.widget.RecyclerView
 
-class MainActivity : AppCompatActivity(), DataStore.Listener {
-
-    private var nearbyDeviceSessionAdapter = NearbyDeviceSessionAdapter()
-    private lateinit var recycler: RecyclerView
-    private lateinit var nearbyManager: NearbyManager
+class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-
-        findViewById<RecyclerView>(R.id.recycler).apply {
-            layoutManager = androidx.recyclerview.widget.LinearLayoutManager(context)
-            addItemDecoration(DividerItemDecoration(context, DividerItemDecoration.VERTICAL))
-            adapter = nearbyDeviceSessionAdapter
-            recycler = this
-        }
-        findViewById<TextView>(R.id.device_name_value).apply {
-            text = getDataStore().getName()
-        }
-
-        nearbyManager = NearbyManager(this)
+        registerReceiver(UnlockBroadcastReceiver, IntentFilter(Intent.ACTION_SCREEN_ON))
     }
 
-    override fun onStart() {
-        super.onStart()
-        nearbyDeviceSessionAdapter.clearData()
-        getDataStore().listener = this
-        nearbyManager.start()
-    }
-
-    override fun onStop() {
-        getDataStore().listener = null
-        nearbyManager.stop()
-        super.onStop()
-    }
-
-    override fun onSessionListUpdated() {
-        nearbyDeviceSessionAdapter.setData(getDataStore().getAllSessions())
-    }
 }
